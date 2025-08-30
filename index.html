@@ -10,7 +10,8 @@
     header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
     h1{font-size:42px;margin:0 0 12px}
     p{line-height:1.5}
-    .cta{display:inline-block;background:#000;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:18px;margin-top:20px}
+    .cta{display:inline-block;background:#000;color:#fff;padding:14px 22px;border-radius:8px;
+         text-decoration:none;font-weight:bold;font-size:18px;cursor:pointer}
     .mockup{border:1px solid #eee;border-radius:12px;overflow:hidden;margin-top:20px}
     footer{margin-top:60px;color:#666;font-size:13px;text-align:center}
     @media(max-width:700px){h1{font-size:32px}}
@@ -29,8 +30,11 @@
          Disponible en blanco o negro. Envío estimado 10–14 días.</p>
       <p style="font-weight:bold;font-size:22px">29 €</p>
 
-      <!-- Botón Stripe Checkout -->
-      <button id="checkoutButton" class="cta">Preorder ahora</button>
+      <!-- Fallback SIEMPRE funcional: Payment Link de Stripe -->
+      <!-- ① CAMBIA href por TU Payment Link real de Stripe -->
+      <a id="checkout" class="cta"
+         href="https://buy.stripe.com/TU_PAYMENT_LINK"
+         target="_blank" rel="noopener">Preorder ahora</a>
 
       <div class="mockup">
         <img src="assets/mockup.jpg" alt="Mockup camiseta #melasuda" style="width:100%">
@@ -42,20 +46,25 @@
     </footer>
   </div>
 
-  <!-- Stripe -->
+  <!-- Stripe.js (opcional: para Checkout con price_id) -->
   <script src="https://js.stripe.com/v3/"></script>
   <script>
+    // Año en footer
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    var stripe = Stripe("pk_live_51Q7B97JwDIR7f9jUnmIuMpEKefkathyJOlOcTXWOgcGQX56LJjTxUcnDs3osunQhLpOa1sX3LuL4yYVzCset1LZe00q88Rh3Kn"); // 👈 cambia aquí tu clave pública
-    document.getElementById("checkoutButton").addEventListener("click", function () {
-      stripe.redirectToCheckout({
-        lineItems: [{ price: "prod_SxgWNHW1CS0Kvw", quantity: 1 }], // 👈 cambia aquí tu price_id
-        mode: "payment",
-        successUrl: window.location.origin + "/success.html",
-        cancelUrl: window.location.origin + "/cancel.html"
-      });
-    });
-  </script>
-</body>
-</html>
+    // Config opcional para usar redirectToCheckout (progresive enhancement)
+    // ② CAMBIA por tu Publishable Key (pk_live_... o pk_test_...)
+    const STRIPE_PUBLISHABLE_KEY = "prod_SxgWNHW1CS0Kvw";
+    // ③ CAMBIA por tu Price ID (price_...)
+    const STRIPE_PRICE_ID = "price_1S1l8yJwDIR7f9jUB54TBebD";
+
+    (function(){
+      const btn = document.getElementById("checkout");
+
+      // Si Stripe.js está cargado y has puesto tus claves reales, usamos Checkout
+      const usableKey = STRIPE_PUBLISHABLE_KEY && !STRIPE_PUBLISHABLE_KEY.includes("TU_PUBLIC_KEY");
+      const usablePrice = STRIPE_PRICE_ID && STRIPE_PRICE_ID.startsWith("price_");
+
+      if (typeof Stripe === "function" && usableKey && usablePrice) {
+        const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+        btn.addEventListener("click", functio
