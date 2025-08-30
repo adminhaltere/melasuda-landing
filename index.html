@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>#melasuda — Drop 01 · Preventa</title>
+  <style>
+    body{font-family:Inter,Arial,sans-serif;margin:0;padding:0;background:#fff;color:#000}
+    .wrap{max-width:900px;margin:auto;padding:32px}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+    h1{font-size:42px;margin:0 0 12px}
+    p{line-height:1.5}
+    .cta{display:inline-block;background:#000;color:#fff;padding:14px 22px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:18px;margin-top:20px}
+    .mockup{border:1px solid #eee;border-radius:12px;overflow:hidden;margin-top:20px}
+    footer{margin-top:60px;color:#666;font-size:13px;text-align:center}
+    @media(max-width:700px){h1{font-size:32px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="font-weight:800">#melasuda</div>
+      <div>Drop 01 · Preventa</div>
+    </header>
+
+    <main>
+      <h1>Camiseta #melasuda</h1>
+      <p>Edición limitada · Solo 100 uds · Preventa abierta 7 días.<br>
+         Disponible en blanco o negro. Envío estimado 10–14 días.</p>
+      <p style="font-weight:bold;font-size:22px">29 €</p>
+
+      <!-- Botón Stripe Checkout -->
+      <button id="checkoutButton" class="cta">Preorder ahora</button>
+
+      <div class="mockup">
+        <img src="assets/mockup.jpg" alt="Mockup camiseta #melasuda" style="width:100%">
+      </div>
+    </main>
+
+    <footer>
+      © <span id="year"></span> #melasuda · Política de privacidad · Términos
+    </footer>
+  </div>
+
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    var stripe = Stripe("pk_test_TU_PUBLIC_KEY"); // 👈 cambia aquí tu clave pública
+    document.getElementById("checkoutButton").addEventListener("click", function () {
+      stripe.redirectToCheckout({
+        lineItems: [{ price: "price_xxxxx", quantity: 1 }], // 👈 cambia aquí tu price_id
+        mode: "payment",
+        successUrl: window.location.origin + "/success.html",
+        cancelUrl: window.location.origin + "/cancel.html"
+      });
+    });
+  </script>
+</body>
+</html>
