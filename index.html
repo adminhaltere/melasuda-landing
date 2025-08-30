@@ -47,10 +47,10 @@
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    var stripe = Stripe("pk_test_TU_PUBLIC_KEY"); // 👈 cambia aquí tu clave pública
+    var stripe = Stripe("pk_live_51Q7B97JwDIR7f9jUnmIuMpEKefkathyJOlOcTXWOgcGQX56LJjTxUcnDs3osunQhLpOa1sX3LuL4yYVzCset1LZe00q88Rh3Kn"); // 👈 cambia aquí tu clave pública
     document.getElementById("checkoutButton").addEventListener("click", function () {
       stripe.redirectToCheckout({
-        lineItems: [{ price: "price_xxxxx", quantity: 1 }], // 👈 cambia aquí tu price_id
+        lineItems: [{ price: "prod_SxgWNHW1CS0Kvw", quantity: 1 }], // 👈 cambia aquí tu price_id
         mode: "payment",
         successUrl: window.location.origin + "/success.html",
         cancelUrl: window.location.origin + "/cancel.html"
